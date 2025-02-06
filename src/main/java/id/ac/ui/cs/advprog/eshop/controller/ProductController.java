@@ -29,7 +29,7 @@ public class ProductController {
         return "redirect:list";
     }
 
-    @GetMapping("/List")
+    @GetMapping("/list")
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
