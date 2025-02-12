@@ -19,4 +19,9 @@ public class ProductRepository{
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
+
+    public void delete(String Id) {
+        productData.removeIf(product -> product.getProductId().equals(Id));
+        return;
+    }
 }
