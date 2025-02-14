@@ -29,7 +29,7 @@ public class ProductRepository{
         return null;
     }
 
-    public Product update(Product product) {
+    public Product edit(Product product) {
         Product existingProduct = findProductById(product.getProductId());
         existingProduct.setProductName(product.getProductName());
         existingProduct.setProductQuantity(product.getProductQuantity());

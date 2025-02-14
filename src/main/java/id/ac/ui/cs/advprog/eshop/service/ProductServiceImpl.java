@@ -33,8 +33,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findProductById(id);
     }
 
-    public Product update(Product product) {
-        productRepository.update(product);
+    public Product edit(Product product) {
+        productRepository.edit(product);
         return product;
     }
 }
