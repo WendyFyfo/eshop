@@ -29,6 +29,15 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 
+    public Product findProductById(String id) {
+        return productRepository.findProductById(id);
+    }
+
+    public Product edit(Product product) {
+        productRepository.edit(product);
+        return product;
+    }
+
     public void delete(String Id){
         productRepository.delete(Id);
     }
