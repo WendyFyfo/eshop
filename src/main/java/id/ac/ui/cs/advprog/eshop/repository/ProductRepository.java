@@ -20,7 +20,7 @@ public class ProductRepository{
         return productData.iterator();
     }
 
-    public Product findProductIndexById (String Id) {
+    public Product findProductById (String Id) {
         for(Product existingProduct : productData) {
             if(existingProduct.getProductId().equals(Id)) {
                 return existingProduct;
@@ -29,8 +29,8 @@ public class ProductRepository{
         return null;
     }
 
-    public Product edit(Product product) {
-        Product existingProduct = findProductIndexById(product.getProductId());
+    public Product update(Product product) {
+        Product existingProduct = findProductById(product.getProductId());
         existingProduct.setProductName(product.getProductName());
         existingProduct.setProductQuantity(product.getProductQuantity());
         return existingProduct;
