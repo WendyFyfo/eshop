@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.InstanceNotFoundException;
 import java.util.List;
 
 @Controller
@@ -38,7 +39,12 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable("id") String id,  Model model) {
-        Product existingProduct = service.findProductById(id);
+        Product existingProduct = null;
+        try {
+            existingProduct = service.findProductById(id);
+        } catch (InstanceNotFoundException e) {
+            return "redirect:list";
+        }
         model.addAttribute("existingProduct", existingProduct);
         return "editProduct";
     }
