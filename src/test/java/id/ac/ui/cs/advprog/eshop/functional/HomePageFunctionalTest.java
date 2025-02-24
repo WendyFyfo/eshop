@@ -26,30 +26,32 @@ public class HomePageFunctionalTest {
     /**
      * THe base URL for testing. Default to {@code http://localhost}
      */
-    @Value("{app.baseUrl:http://localhost}")
+    @Value("${app.baseUrl:http://localhost}")
     private String testBaseUrl;
 
     private String baseUrl;
+    private String homePageUrl;
 
     @BeforeEach
     void setupTest() {
         baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
+        homePageUrl = baseUrl + "/product/list";
     }
 
     @Test
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
         //Exercise
-        driver.get(baseUrl);
+        driver.get(homePageUrl);
         String pageTitle = driver.getTitle();
 
         // Verify
-        assertEquals("ADV Shop", pageTitle);
+        assertEquals("Product List", pageTitle);
     }
 
     @Test
     void welcomeMessage_homePage_isCorrect(ChromeDriver driver) throws Exception {
         // Exercise
-        driver.get(baseUrl);
+        driver.get(homePageUrl);
         String welcomeMessage = driver.findElement(By.tagName("h3")).getText();
 
         // Verify
