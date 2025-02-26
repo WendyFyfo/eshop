@@ -83,7 +83,7 @@ public class ProductControllerTest {
 
     @Test
     public void editProductPageTest_ProductNotFound() throws Exception {
-        Mockito.when(service.findProductById("product-not-exist")).thenThrow(new InstanceNotFoundException());
+        Mockito.when(service.findProductById("product-not-exist")).thenThrow(new Exception());
         mockMvc.perform(get("/product/edit/product-not-exist"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("list"));
