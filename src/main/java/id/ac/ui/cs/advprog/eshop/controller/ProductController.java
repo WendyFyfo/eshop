@@ -21,7 +21,7 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
-        return "createProduct";
+        return "CreateProduct";
     }
 
     @PostMapping("/create")
@@ -34,19 +34,19 @@ public class ProductController {
     public String productListPage(Model model) {
         List<Product> allProducts = service.findAll();
         model.addAttribute("products", allProducts);
-        return "productList";
+        return "ProductList";
     }
 
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable("id") String id,  Model model) {
-        Product existingProduct = null;
+        Product existingProduct;
         try {
             existingProduct = service.findProductById(id);
-        } catch (InstanceNotFoundException e) {
+            model.addAttribute("existingProduct", existingProduct);
+            return "EditProduct";
+        } catch (Exception e) {
             return "redirect:list";
         }
-        model.addAttribute("existingProduct", existingProduct);
-        return "editProduct";
     }
 
     @PostMapping("/edit")
