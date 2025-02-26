@@ -52,7 +52,7 @@ public class ProductControllerTest {
     public void CreateProductPageTest() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(content().string(containsString("Create New Product")));
     }
 
@@ -65,7 +65,7 @@ public class ProductControllerTest {
         Mockito.when(service.findAll()).thenReturn(List.of(product1));
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(content().string(containsString("Sampo Cap Bambang")))
                 .andExpect(content().string(containsString("100")));
     }
@@ -76,7 +76,7 @@ public class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/" + product1.getProductId()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attributeExists("existingProduct"))
                 .andExpect(model().attribute("existingProduct", product1));
     }
