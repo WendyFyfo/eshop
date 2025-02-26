@@ -21,20 +21,20 @@ public class ProductRepository{
         return productData.iterator();
     }
 
-    public Product findProductById (String Id) throws InstanceNotFoundException {
+    public Product findProductById (String Id) throws Exception {
         for(Product existingProduct : productData) {
             if(existingProduct.getProductId().equals(Id)) {
                 return existingProduct;
             }
         }
-        throw new InstanceNotFoundException();
+        throw new Exception();
     }
 
     public Product edit(Product product) {
         Product existingProduct = null;
         try {
             existingProduct = findProductById(product.getProductId());
-        } catch (InstanceNotFoundException e) {
+        } catch (Exception e) {
             return null;
         }
         existingProduct.setProductName(product.getProductName());

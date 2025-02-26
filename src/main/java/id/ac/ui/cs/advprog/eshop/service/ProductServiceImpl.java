@@ -5,7 +5,6 @@ import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.InstanceNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
         return allProduct;
     }
 
-    public Product findProductById(String id) throws InstanceNotFoundException {
+    public Product findProductById(String id) throws Exception {
         return productRepository.findProductById(id);
     }
 

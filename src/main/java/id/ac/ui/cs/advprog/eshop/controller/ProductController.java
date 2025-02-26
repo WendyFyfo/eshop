@@ -39,14 +39,14 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable("id") String id,  Model model) {
-        Product existingProduct = null;
+        Product existingProduct;
         try {
             existingProduct = service.findProductById(id);
-        } catch (InstanceNotFoundException e) {
+            model.addAttribute("existingProduct", existingProduct);
+            return "editProduct";
+        } catch (Exception e) {
             return "redirect:list";
         }
-        model.addAttribute("existingProduct", existingProduct);
-        return "editProduct";
     }
 
     @PostMapping("/edit")
