@@ -39,7 +39,7 @@ public class ProductListPageFunctionalTest {
     }
 
     @Test
-    void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
+    void pageTitle_isCorrect(ChromeDriver driver) {
         //Exercise
         driver.get(homePageUrl);
         String pageTitle = driver.getTitle();
@@ -49,7 +49,7 @@ public class ProductListPageFunctionalTest {
     }
 
     @Test
-    void welcomeMessage_homePage_isCorrect(ChromeDriver driver) throws Exception {
+    void welcomeMessage_homePage_isCorrect(ChromeDriver driver) {
         // Exercise
         driver.get(homePageUrl);
         String welcomeMessage = driver.findElement(By.tagName("h3")).getText();

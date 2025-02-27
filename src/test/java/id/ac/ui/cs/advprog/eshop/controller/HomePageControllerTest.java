@@ -27,7 +27,7 @@ public class HomePageControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void HomePagetPageTest() throws Exception {
+    public void HomePagePageTest() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Advance Programming Eshop")));
