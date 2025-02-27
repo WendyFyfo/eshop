@@ -15,7 +15,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(SeleniumJupiter.class)
-public class HomePageFunctionalTest {
+public class ProductListPageFunctionalTest {
     /**
      * The port number assigned to the running application during test execution.
      * Set automatically during each test run by Spring Framework's test context.
@@ -32,6 +32,12 @@ public class HomePageFunctionalTest {
     private String baseUrl;
     private String homePageUrl;
 
+    @BeforeEach
+    void setupTest() {
+        baseUrl = String.format("%s:%d", testBaseUrl, serverPort);
+        homePageUrl = baseUrl + "/product/list";
+    }
+
     @Test
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
         //Exercise
@@ -39,7 +45,7 @@ public class HomePageFunctionalTest {
         String pageTitle = driver.getTitle();
 
         // Verify
-        assertEquals("HomePage", pageTitle);
+        assertEquals("Product List", pageTitle);
     }
 
     @Test
