@@ -1,13 +1,19 @@
 name: SonarQube
+
 on:
   push:
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 21
@@ -29,5 +35,6 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build and analyze
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: chmod +x gradlew && ./gradlew build sonar --info
+        run: chmod +x gradlew && ./gradlew build jacocoTestReport sonar --info
