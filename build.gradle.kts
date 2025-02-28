@@ -11,6 +11,7 @@ sonar {
         property("sonar.projectKey", "WendyFyfo_eshop")
         property("sonar.organization", "wendyfyfo")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
@@ -41,17 +42,22 @@ val junitJupiterVersion = "5.9.1"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.projectlombok:lombok")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
+
     testImplementation("org.seleniumhq.selenium:selenium-java:$seleniumJavaVersion")
+
     testImplementation("io.github.bonigarcia:selenium-jupiter:$seleniumJupiterVersion")
     testImplementation("io.github.bonigarcia:webdrivermanager:$webdrivermanagerVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
 }
+
 
 tasks.register<Test>("unitTest") {
     description = "Runs unit tests."
@@ -84,5 +90,10 @@ tasks.test {
 }
 
 tasks.jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
     dependsOn(tasks.test)
 }
