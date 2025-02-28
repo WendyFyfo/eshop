@@ -7,45 +7,16 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class CarRepository {
+public interface CarRepository {
     static int id = 0;
-    private List<Car> carData = new ArrayList<>();
-    public Car create(Car car){
-        if(car.getCarId() == null){
-            UUID uuid = UUID.randomUUID();
-            car.setCarId(uuid.toString());
-        }
-        carData.add(car);
-        return car;
-    }
+    List<Car> carData = null;
+    public Car create(Car car);
 
-    public Iterator<Car> findAll(){
-        return carData.iterator();
-    }
-    public Car findById(String id){
-        for (Car car : carData) {
-            if(car.getCarId().equals(id)){
-                return car;
-            }
-        }
-        return null;
-    }
+    public Iterator<Car> findAll();
 
-    public Car update(String id, Car updatedCar){
-        for(int i = 0; i < carData.size(); i++){
-            Car car = carData.get(i);
-            if(car.getCarId().equals(id)){
-                //update the existing car with the new information
-                car.setCarName(updatedCar.getCarName());
-                car.setCarColor(updatedCar.getCarColor());
-                car.setCarQuantity(updatedCar.getCarQuantity());
-                return car;
-            }
-        }
-        return null;
-    }
+    public Car findById(String id);
 
-    public void delete(String id){
-        carData.removeIf(car -> car.getCarId().equals(id));
-    }
+    public Car update(String id, Car updatedCar);
+
+    public void delete(String id);
 }
