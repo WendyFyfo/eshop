@@ -1,11 +1,13 @@
-#EShop - Pemrograman Lanjut
+# EShop - Pemrograman Lanjut
 
 ## Daftar Isi
 - [Tutorial 1](#tutorial-1)
   - [Reflection 1](#reflection-1)
   - [Reflection 2](#reflection-2)
 - [Tutorial 3](#tutorial-3)
-  - [Reflection 1](#reflection-1-1)
+    - [Reflection 1](#reflection-1-1)
+- [Tutorial 4](#tutorial-4)
+  - [Reflection 1](#reflection-1-2)
 
 
 ## Tutorial 1
@@ -95,3 +97,9 @@
     Contoh:
 
         - Jika CarController langsung membuat instance dari CarRepository alih-alih bergantung pada CarService, maka jika  kita ingin mengganti cara meyimopan data seperti List<Car>, kita harus mengubah CarController secara langsung, yang bisa menyebabkan banyak perubahan di bagian-bagian lain.
+
+## Tutorial 4
+### Reflection 1
+1. Alur TDD yang saya ikuti cukp berguna bagi saya karena mengarahkan fokus saya terhadap fungsionalitas dari kode yang saya tulis dibandingkan implementasinya. Dengan development yang berdasarkan test, prosees implementasi saya lebih terarah dan mempermudah mengecek fungsionalitas kode.
+
+2. Menurut saya unit-test yang saya buat sudah cukup mengikuti priniple F.I.R.S.T. Tiap test yang dibuat melingkup satu case saja dan alur tiap test dibuat singkat. Tiap test juga memilliki kondisi yang terisolasi, tidak ada test yang bergantung test lain. Test yang dibuat juga dapat dijalankan secara automatis dan selalu membuat hasil yang sama.
