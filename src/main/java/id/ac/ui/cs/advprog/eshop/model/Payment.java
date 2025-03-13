@@ -15,6 +15,8 @@ public class Payment {
     String method;
     String status;
     Map<String, String> paymentData;
+    static List<String> validPaymentMethod = List.of("VOUCHER_CODE", "BANK_TRANSFER");
+    static List<String> validStatus= List.of("SUCCESS", "REJECTED");
 
     public Payment(String id, String method, Map<String, String> paymentData) {
         String paymentFeature = "";
@@ -24,7 +26,7 @@ public class Payment {
             paymentCode = entry.getValue();
         }
 
-        if(method != "VOUCHER_CODE" && method != "BANK_TRANSFER" ) {
+        if( !validPaymentMethod.contains(method) ) {
             throw new IllegalArgumentException();
         }
         if(method.equals("VOUCHER_CODE") && !paymentFeature.equals("voucherCode")) {
@@ -53,7 +55,7 @@ public class Payment {
     }
 
     public void setStatus(String status) {
-        if(status.equals("SUCCESS") || status.equals("REJECTED")) {
+        if(validStatus.contains(status)) {
             this.status = status;
         }
 
