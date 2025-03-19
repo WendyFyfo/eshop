@@ -99,6 +99,6 @@ public class PaymentRepositoryTest {
         paymentRepository.update(payment1, PAYMENT_STATUSES.get(2));
         paymentRepository.update(payment2, PAYMENT_STATUSES.get(2));
 
-        assertEquals(OrderStatus.FAILED, order.getStatus());
+        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
     }
 }
