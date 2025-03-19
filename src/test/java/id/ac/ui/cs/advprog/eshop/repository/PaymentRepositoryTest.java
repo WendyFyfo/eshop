@@ -87,7 +87,7 @@ public class PaymentRepositoryTest {
 
     @Test
     void testGetOrderIfNotFound() {
-        Order foundOrder = paymentRepository.getOrder("anId");
+        Order foundOrder = paymentRepository.getOrder("non-existent-id");
         assertNull(foundOrder);
     }
 

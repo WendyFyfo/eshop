@@ -70,7 +70,7 @@ class PaymentServiceTest {
         when(paymentRepository.findById("payment-id-1")).thenReturn(null);
         when(paymentRepository.save(any(Payment.class), any(Order.class))).thenReturn(payments.getFirst());
 
-        Payment result = paymentService.addPayment("payment-id-1", orders.getFirst(), PaymentMethod.VOUCHER_CODE.name(), payments.getFirst().getPaymentData());
+        Payment result = paymentService.addPayment(orders.getFirst(), PaymentMethod.VOUCHER_CODE.name(), payments.getFirst().getPaymentData());
 
         assertNotNull(result);
         assertEquals("payment-id-1", result.getId());
@@ -82,7 +82,7 @@ class PaymentServiceTest {
         when(paymentRepository.findById("payment-id-2")).thenReturn(null);
         when(paymentRepository.save(any(Payment.class), any(Order.class))).thenReturn(payments.get(1));
 
-        Payment result = paymentService.addPayment("payment-id-2", orders.get(1), PaymentMethod.BANK_TRANSFER.name(), payments.get(1).getPaymentData());
+        Payment result = paymentService.addPayment(orders.get(1), PaymentMethod.BANK_TRANSFER.name(), payments.get(1).getPaymentData());
 
         assertNotNull(result);
         assertEquals("payment-id-2", result.getId());
@@ -92,7 +92,7 @@ class PaymentServiceTest {
     @Test
     void testAddPaymentWithInvalidMethod() {
         assertThrows(IllegalArgumentException.class, () ->
-                paymentService.addPayment("payment-id-3", orders.getFirst(), "INVALID_METHOD", new HashMap<>())
+                paymentService.addPayment(orders.getFirst(), "INVALID_METHOD", new HashMap<>())
         );
     }
 
