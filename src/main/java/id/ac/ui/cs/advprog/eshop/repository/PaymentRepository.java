@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import enums.OrderStatus;
+import enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import org.springframework.stereotype.Repository;
@@ -26,10 +27,10 @@ public class PaymentRepository {
         paymentData.put(payment.getId(), payment);
         paymentOrder.put(payment.getId(), order);
 
-        if ("SUCCESS".equals(payment.getStatus())) {
-            order.setStatus(OrderStatus.SUCCESS.getValue());
+        if (PaymentStatus.SUCCESS.name().equals(payment.getStatus())) {
+            order.setStatus(OrderStatus.SUCCESS.name());
         } else {
-            order.setStatus(OrderStatus.FAILED.getValue());
+            order.setStatus(OrderStatus.FAILED.name());
         }
 
         return payment;
@@ -46,10 +47,10 @@ public class PaymentRepository {
         payment.setStatus(status);
         Order order = paymentOrder.get(payment.getId());
 
-        if ("SUCCESS".equals(status)) {
-            order.setStatus(OrderStatus.SUCCESS.getValue());
+        if (PaymentStatus.SUCCESS.name().equals(status)) {
+            order.setStatus(OrderStatus.SUCCESS.name());
         } else {
-            order.setStatus(OrderStatus.FAILED.getValue());
+            order.setStatus(OrderStatus.FAILED.name());
         }
     }
 
@@ -68,4 +69,3 @@ public class PaymentRepository {
         return paymentOrder.get(paymentId);
     }
 }
-

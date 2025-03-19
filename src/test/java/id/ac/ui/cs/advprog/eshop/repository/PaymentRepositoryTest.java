@@ -1,6 +1,8 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
 import enums.OrderStatus;
+import enums.PaymentMethod;
+import enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.model.Product;
@@ -21,9 +23,6 @@ public class PaymentRepositoryTest {
     List<Product> products = List.of(product);
     Order order;
 
-    public static final List<String> PAYMENT_METHODS = List.of("VOUCHER_CODE", "BANK_TRANSFER");
-    public static final List<String> PAYMENT_STATUSES = List.of("PENDING", "SUCCESS", "REJECTED");
-
     @BeforeEach
     void setUp() {
         paymentRepository = new PaymentRepository();
@@ -31,18 +30,18 @@ public class PaymentRepositoryTest {
 
         Map<String, String> paymentVoucher = new HashMap<>();
         paymentVoucher.put("voucherCode", "ESHOP1234ABC5678");
-        Payment voucher = new Payment("random-id-1", PAYMENT_METHODS.get(0), paymentVoucher);
+        Payment voucher = new Payment("random-id-1", PaymentMethod.VOUCHER_CODE.name(), paymentVoucher);
         payments.add(voucher);
 
         Map<String, String> paymentBankTransfer = new HashMap<>();
         paymentBankTransfer.put("bankName", "aBankName");
         paymentBankTransfer.put("referenceCode", "aRefCode");
-        Payment bankTransfer = new Payment("random-id-2", PAYMENT_METHODS.get(1), paymentBankTransfer);
+        Payment bankTransfer = new Payment("random-id-2", PaymentMethod.BANK_TRANSFER.name(), paymentBankTransfer);
         payments.add(bankTransfer);
     }
 
     @Test
-    void testSaveCreate(){
+    void testSaveCreate() {
         Payment payment = payments.getFirst();
         Payment result = paymentRepository.save(payment, order);
         assertEquals(payment.getId(), result.getId());
@@ -52,53 +51,57 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    void testUpdateInvalidStatus(){
+    void testUpdateInvalidStatus() {
         Payment payment = payments.getFirst();
         paymentRepository.save(payment, order);
-        assertThrows(IllegalArgumentException.class, () -> paymentRepository.update(payment, "INVALID"));
+
+        // Ensure invalid status is rejected
+        String invalidStatus = "INVALID";
+        assertFalse(PaymentStatus.contains(invalidStatus));
+        assertThrows(IllegalArgumentException.class, () -> paymentRepository.update(payment, invalidStatus));
     }
 
     @Test
-    void testFindByIdWithNull(){
+    void testFindByIdWithNull() {
         assertThrows(NullPointerException.class, () -> paymentRepository.findById(null));
     }
 
     @Test
-    void testSaveDuplicatePaymentId(){
+    void testSaveDuplicatePaymentId() {
         Payment payment = payments.getFirst();
         paymentRepository.save(payment, order);
         assertThrows(IllegalArgumentException.class, () -> paymentRepository.save(payment, order));
     }
 
     @Test
-    void testUpdateNonExistentPayment(){
-        Payment payment = new Payment("non-existent-id", PAYMENT_METHODS.get(0), Map.of("voucherCode", "ESHOP1234ABC5678"));
-        assertThrows(IllegalArgumentException.class, () -> paymentRepository.update(payment, PAYMENT_STATUSES.get(1)));
+    void testUpdateNonExistentPayment() {
+        Payment payment = new Payment("non-existent-id", PaymentMethod.VOUCHER_CODE.name(), Map.of("voucherCode", "ESHOP1234ABC5678"));
+        assertThrows(IllegalArgumentException.class, () -> paymentRepository.update(payment, PaymentStatus.SUCCESS.name()));
     }
 
     @Test
-    void testFindAllIfEmpty(){
+    void testFindAllIfEmpty() {
         List<Payment> payments = paymentRepository.findAll();
         assertEquals(0, payments.size());
     }
 
     @Test
-    void testGetOrderIfNotFound(){
+    void testGetOrderIfNotFound() {
         Order foundOrder = paymentRepository.getOrder("anId");
         assertNull(foundOrder);
     }
 
     @Test
-    void testOrderStatusAfterAllPaymentsFail(){
-        Payment payment1 = new Payment("random-id-1", PAYMENT_METHODS.get(0), Map.of("voucherCode", "INVALID"));
-        Payment payment2 = new Payment("random-id-2", PAYMENT_METHODS.get(1), Map.of("bankName", "Invalid", "referenceCode", "Invalid"));
+    void testOrderStatusAfterAllPaymentsFail() {
+        Payment payment1 = new Payment("random-id-1", PaymentMethod.VOUCHER_CODE.name(), Map.of("voucherCode", "INVALID"));
+        Payment payment2 = new Payment("random-id-2", PaymentMethod.BANK_TRANSFER.name(), Map.of("bankName", "Invalid", "referenceCode", "Invalid"));
 
         paymentRepository.save(payment1, order);
         paymentRepository.save(payment2, order);
 
-        paymentRepository.update(payment1, PAYMENT_STATUSES.get(2));
-        paymentRepository.update(payment2, PAYMENT_STATUSES.get(2));
+        paymentRepository.update(payment1, PaymentStatus.REJECTED.name());
+        paymentRepository.update(payment2, PaymentStatus.REJECTED.name());
 
-        assertEquals(OrderStatus.FAILED.getValue(), order.getStatus());
+        assertEquals(OrderStatus.FAILED.name(), order.getStatus());
     }
 }
