@@ -1,69 +1,59 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import lombok.Builder;
+import enums.PaymentMethod;
+import enums.PaymentStatus;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
 
 @Getter
 public class Payment {
-    String id;
-    String method;
-    String status;
-    Map<String, String> paymentData;
-
-    private static final String VOUCHER_CODE = "VOUCHER_CODE";
-    private static final String BANK_TRANSFER = "BANK_TRANSFER";
-    private static final String SUCCESS = "SUCCESS";
-    private static final String REJECTED = "REJECTED";
-    private static final List<String> VALID_PAYMENT_METHODS = List.of(VOUCHER_CODE, BANK_TRANSFER);
-    private static final List<String> VALID_STATUSES = List.of(SUCCESS, REJECTED);
+    private final String id;
+    private final String method;
+    private String status;
+    private final Map<String, String> paymentData;
 
     public Payment(String id, String method, Map<String, String> paymentData) {
-        String paymentFeature = "";
-        String paymentCode = "" ;
-        for(Map.Entry<String,String> entry : paymentData.entrySet()) {
-            paymentFeature = entry.getKey();
-            paymentCode = entry.getValue();
-        }
-
-        if( !VALID_PAYMENT_METHODS.contains(method) ) {
-            throw new IllegalArgumentException();
-        }
-        if(method.equals(VOUCHER_CODE) && !paymentFeature.equals("voucherCode")) {
+        if (method == null || (!method.equals(PaymentMethod.VOUCHER_CODE.name()) && !method.equals(PaymentMethod.BANK_TRANSFER.name()))) {
             throw new IllegalArgumentException();
         }
 
         this.id = id;
         this.method = method;
         this.paymentData = paymentData;
-        this.status = checkStatus(method, paymentFeature, paymentCode);
+        this.status = checkStatus(method, paymentData);
     }
 
-
-    private String checkStatus(String method, String paymentFeature, String paymentCode) {
-        if (paymentFeature == null || paymentFeature.isEmpty() ||
-                paymentCode == null || paymentCode.isEmpty()) {
-            return REJECTED;
+    private String checkStatus(String method, Map<String, String> paymentData) {
+        if (method.equals(PaymentMethod.VOUCHER_CODE.name())) {
+            return validateVoucher(paymentData);
+        } else if (method.equals(PaymentMethod.BANK_TRANSFER.name())) {
+            return validateBankTransfer(paymentData);
         }
+        return PaymentStatus.REJECTED.name();
+    }
 
-        if (method.equals("VOUCHER_CODE") &&
-                !paymentCode.matches("^ESHOP(?=(.*\\d){8})[A-Z0-9]{11}$")) {
-            return REJECTED;
+    private String validateVoucher(Map<String, String> paymentData) {
+        String voucherCode = paymentData.get("voucherCode");
+        if (voucherCode == null || !voucherCode.matches("^ESHOP(?=(\\D*\\d){8,})[A-Z0-9]{11}$")) {
+            return PaymentStatus.REJECTED.name();
         }
+        return PaymentStatus.SUCCESS.name();
+    }
 
-        return SUCCESS;
+    private String validateBankTransfer(Map<String, String> paymentData) {
+        String bankName = paymentData.get("bankName");
+        String referenceCode = paymentData.get("referenceCode");
+        if (bankName == null || bankName.isEmpty() || referenceCode == null || referenceCode.isEmpty()) {
+            return PaymentStatus.REJECTED.name();
+        }
+        return PaymentStatus.SUCCESS.name();
     }
 
     public void setStatus(String status) {
-        if(VALID_STATUSES.contains(status)) {
-            this.status = status;
-        }else{
-            throw new IllegalArgumentException();
+        if (!status.equals(PaymentStatus.SUCCESS.name()) && !status.equals(PaymentStatus.REJECTED.name())) {
+            throw new IllegalArgumentException("Invalid status");
         }
+        this.status = status;
     }
 }

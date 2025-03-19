@@ -66,6 +66,13 @@ public class PaymentRepository {
     }
 
     public Order getOrder(String paymentId) {
+        if (paymentId == null) {
+            throw new IllegalArgumentException("Payment ID cannot be null");
+        }
+        if (!paymentOrder.containsKey(paymentId)) {
+            throw new IllegalArgumentException("Order not found for given Payment ID");
+        }
         return paymentOrder.get(paymentId);
     }
+
 }

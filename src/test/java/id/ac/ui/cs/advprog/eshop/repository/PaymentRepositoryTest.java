@@ -87,8 +87,10 @@ public class PaymentRepositoryTest {
 
     @Test
     void testGetOrderIfNotFound() {
-        Order foundOrder = paymentRepository.getOrder("non-existent-id");
-        assertNull(foundOrder);
+        assertThrows(IllegalArgumentException.class, () -> {
+            paymentRepository.getOrder("non-existent-id");
+        }
+        );
     }
 
     @Test
