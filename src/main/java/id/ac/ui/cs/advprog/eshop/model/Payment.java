@@ -15,8 +15,13 @@ public class Payment {
     String method;
     String status;
     Map<String, String> paymentData;
-    static List<String> validPaymentMethod = List.of("VOUCHER_CODE", "BANK_TRANSFER");
-    static List<String> validStatus= List.of("SUCCESS", "REJECTED");
+
+    private static final String VOUCHER_CODE = "VOUCHER_CODE";
+    private static final String BANK_TRANSFER = "BANK_TRANSFER";
+    private static final String SUCCESS = "SUCCESS";
+    private static final String REJECTED = "REJECTED";
+    private static final List<String> VALID_PAYMENT_METHODS = List.of(VOUCHER_CODE, BANK_TRANSFER);
+    private static final List<String> VALID_STATUSES = List.of(SUCCESS, REJECTED);
 
     public Payment(String id, String method, Map<String, String> paymentData) {
         String paymentFeature = "";
@@ -26,10 +31,10 @@ public class Payment {
             paymentCode = entry.getValue();
         }
 
-        if( !validPaymentMethod.contains(method) ) {
+        if( !VALID_PAYMENT_METHODS.contains(method) ) {
             throw new IllegalArgumentException();
         }
-        if(method.equals("VOUCHER_CODE") && !paymentFeature.equals("voucherCode")) {
+        if(method.equals(VOUCHER_CODE) && !paymentFeature.equals("voucherCode")) {
             throw new IllegalArgumentException();
         }
 
@@ -43,19 +48,19 @@ public class Payment {
     private String checkStatus(String method, String paymentFeature, String paymentCode) {
         if (paymentFeature == null || paymentFeature.isEmpty() ||
                 paymentCode == null || paymentCode.isEmpty()) {
-            return "REJECTED";
+            return REJECTED;
         }
 
         if (method.equals("VOUCHER_CODE") &&
                 !paymentCode.matches("^ESHOP(?=(.*\\d){8})[A-Z0-9]{11}$")) {
-            return "REJECTED";
+            return REJECTED;
         }
 
-        return "SUCCESS";
+        return SUCCESS;
     }
 
     public void setStatus(String status) {
-        if(validStatus.contains(status)) {
+        if(VALID_STATUSES.contains(status)) {
             this.status = status;
         }
 
