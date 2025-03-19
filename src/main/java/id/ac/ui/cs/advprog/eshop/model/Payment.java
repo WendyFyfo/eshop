@@ -62,8 +62,8 @@ public class Payment {
     public void setStatus(String status) {
         if(VALID_STATUSES.contains(status)) {
             this.status = status;
+        }else{
+            throw new IllegalArgumentException();
         }
-
-        throw new IllegalArgumentException();
     }
 }
